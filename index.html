@@ -513,7 +513,11 @@
             .logo-icon { font-size: 2rem; }
             .logo-title { font-size: 1.3rem; }
             .book-content-container { min-height: calc(100vh - 200px); margin-bottom: 80px; }
-            .book-content { padding: 30px 20px; min-height: calc(100vh - 200px); font-size: 1rem; line-height: 1.7; -webkit-overflow-scrolling: touch; }
+            .book-content { padding: 30px 20px; min-height: calc(100vh - 200px); line-height: 1.7; -webkit-overflow-scrolling: touch; }
+            .book-content.small-font { font-size: 0.9em; }
+            .book-content.medium-font { font-size: 1em; }
+            .book-content.large-font { font-size: 1.15em; }
+            .book-content.x-large-font { font-size: 1.3em; }
             .cover-title { font-size: 2.5rem; padding-top: 30px; }
             .cover-subtitle { font-size: 1.2rem; }
             .book-page h2.section-title-main { font-size: 1.7rem; }
@@ -552,7 +556,7 @@
                 left: 0;
                 right: 0;
                 bottom: 72px;
-                max-height: min(65vh, 560px);
+                max-height: min(48vh, 420px);
                 background: var(--bg-paper);
                 border-top: 1px solid var(--border);
                 border-radius: 18px 18px 0 0;
@@ -573,7 +577,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding: 10px 16px;
+                padding: 8px 14px;
                 border-bottom: 1px solid var(--border);
             }
             .mobile-tools-title {
@@ -600,17 +604,17 @@
                 border-radius: 50%;
             }
             .mobile-tools-content {
-                padding: 12px 16px 22px;
+                padding: 10px 12px 14px;
                 overflow-y: auto;
-                max-height: calc(min(65vh, 560px) - 56px);
+                max-height: calc(min(48vh, 420px) - 50px);
                 display: flex;
                 flex-direction: column;
-                gap: 16px;
+                gap: 10px;
             }
             .mobile-tools-section {
                 border: 1px solid var(--border);
                 border-radius: var(--border-radius-md);
-                padding: 12px;
+                padding: 9px;
                 background: rgba(255, 255, 255, 0.38);
             }
             .dark-theme .mobile-tools-section { background: rgba(0, 0, 0, 0.22); }
