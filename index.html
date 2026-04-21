@@ -336,10 +336,55 @@
         .bio-author-period { font-family: var(--font-body); font-size: 1.1rem; color: var(--text-secondary); font-style: italic; margin-bottom: 20px; padding-left: 35px; }
         .bio-author-description { font-family: var(--font-body); font-size: 1.1rem; line-height: 1.7; text-align: justify; margin-bottom: 20px; }
         .bio-author-works { margin-top: 25px; padding-left: 20px; }
-        .bio-author-works h4 { font-family: var(--font-heading); color: var(--accent); margin-bottom: 10px; font-size: 1.2rem; }
-        .bio-author-works ul { list-style-type: none; padding-left: 20px; }
-        .bio-author-works li { margin-bottom: 8px; position: relative; padding-left: 20px; }
-        .bio-author-works li::before { content: '•'; position: absolute; left: 0; color: var(--primary); font-size: 1.2rem; }
+        .bio-author-works h4 { font-family: var(--font-heading); color: var(--accent); margin-bottom: 12px; font-size: 1.2rem; }
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+            margin-top: 10px;
+        }
+        .album-card {
+            display: block;
+            text-decoration: none;
+            color: var(--text);
+            background-color: rgba(255, 255, 255, 0.45);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        .dark-theme .album-card { background-color: rgba(0, 0, 0, 0.25); }
+        .album-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        .album-cover {
+            display: block;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            background-color: rgba(0, 0, 0, 0.08);
+        }
+        .album-info {
+            padding: 10px 12px 14px;
+            text-align: center;
+        }
+        .album-title {
+            display: block;
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 4px;
+            line-height: 1.35;
+        }
+        .album-cta {
+            display: inline-block;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
 
         .book-page h2.section-title-main { color: var(--primary); margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border); font-family: var(--font-heading); font-weight: 600; font-size: 2rem; position: relative; text-align: center; }
         .book-page h2.section-title-main::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 100px; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent); }
@@ -995,10 +1040,22 @@
                             </div>
                             <div class="bio-author-works">
                                 <h4>Discografia em Destaque:</h4>
-                                <ul>
-                                    <li>Álbum: Minha Relação com Deus</li>
-                                    <li>EP: Já Deu</li>
-                                </ul>
+                                <div class="album-grid">
+                                    <a class="album-card" href="https://www.youtube.com/watch?v=H--GTYP2bKc&list=OLAK5uy_lzxraiqSD-fFxTbcSucL9HJ5e0iwxTDMw" target="_blank" rel="noopener noreferrer" aria-label="Ouvir álbum Minha Relação com Deus no YouTube">
+                                        <img class="album-cover" src="https://source.boomplaymusic.com/group10/M00/11/29/878a771eb6a74a21a74744dee6e9acc4H1500W1500_320_320.png" alt="Capa do álbum Minha Relação com Deus" loading="lazy">
+                                        <div class="album-info">
+                                            <span class="album-title">Minha Relação com Deus</span>
+                                            <span class="album-cta">Ouvir no YouTube</span>
+                                        </div>
+                                    </a>
+                                    <a class="album-card" href="https://www.youtube.com/watch?v=pEPl1VOju4w&list=OLAK5uy_lYkoIJnDTk1JGBa-KFRUi_77pl36itT4c" target="_blank" rel="noopener noreferrer" aria-label="Ouvir EP Já Deu no YouTube">
+                                        <img class="album-cover" src="https://i.audiomack.com/rejane-mansur/bd7d6ada71.webp?width=1200" alt="Capa do EP Já Deu" loading="lazy">
+                                        <div class="album-info">
+                                            <span class="album-title">Já Deu</span>
+                                            <span class="album-cta">Ouvir no YouTube</span>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </article>
