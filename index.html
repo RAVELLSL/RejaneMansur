@@ -446,7 +446,7 @@
         @keyframes slideInOut { 0% { opacity: 0; transform: translateX(100%); } 15% { opacity: 1; transform: translateX(0); } 85% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; transform: translateX(100%); } }
 
         /* ===== MOBILE DOM ELEMENTS ===== */
-        .mobile-bottom-nav, .mobile-quick-actions, .mobile-notification { display: none; }
+        .mobile-bottom-nav, .mobile-quick-actions, .mobile-notification, .mobile-tools-overlay, .mobile-tools-sheet { display: none; }
 
         /* ===== MOBILE STYLES ===== */
         @media (max-width: 768px) {
@@ -480,6 +480,89 @@
             .mobile-quick-btn { width: 50px; height: 50px; border-radius: 50%; background-color: var(--primary); color: var(--bg-paper); border: none; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
             .mobile-quick-btn:active { transform: scale(0.95); }
             .mobile-quick-btn.active { background-color: var(--accent); }
+            .mobile-tools-overlay {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.28);
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.28s ease, visibility 0.28s ease;
+                z-index: 88;
+            }
+            .mobile-tools-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+            .mobile-tools-sheet {
+                display: block;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 72px;
+                max-height: min(65vh, 560px);
+                background: var(--bg-paper);
+                border-top: 1px solid var(--border);
+                border-radius: 18px 18px 0 0;
+                box-shadow: 0 -10px 32px rgba(0, 0, 0, 0.24);
+                transform: translateY(105%);
+                opacity: 0;
+                pointer-events: none;
+                transition: transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.25s ease;
+                z-index: 89;
+            }
+            .dark-theme .mobile-tools-sheet { background: var(--bg-paper-dark); }
+            .mobile-tools-sheet.active {
+                transform: translateY(0);
+                opacity: 1;
+                pointer-events: auto;
+            }
+            .mobile-tools-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 10px 16px;
+                border-bottom: 1px solid var(--border);
+            }
+            .mobile-tools-title {
+                font-family: var(--font-heading);
+                color: var(--primary);
+                font-weight: 600;
+                display: flex;
+                gap: 8px;
+                align-items: center;
+            }
+            .mobile-tools-handle {
+                width: 44px;
+                height: 4px;
+                border-radius: 4px;
+                background: var(--border);
+                margin: 0 auto 8px;
+            }
+            .mobile-tools-close {
+                border: 1px solid var(--border);
+                background: transparent;
+                color: var(--text-secondary);
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+            }
+            .mobile-tools-content {
+                padding: 12px 16px 22px;
+                overflow-y: auto;
+                max-height: calc(min(65vh, 560px) - 56px);
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+            .mobile-tools-section {
+                border: 1px solid var(--border);
+                border-radius: var(--border-radius-md);
+                padding: 12px;
+                background: rgba(255, 255, 255, 0.38);
+            }
+            .dark-theme .mobile-tools-section { background: rgba(0, 0, 0, 0.22); }
+            .mobile-tools-section .section-title { margin-bottom: 10px; }
             .mobile-notification { display: block; position: fixed; top: 70px; left: 50%; transform: translateX(-50%); background-color: var(--primary); color: var(--bg-paper); padding: 12px 20px; border-radius: var(--border-radius-md); box-shadow: var(--shadow-md); z-index: var(--z-notification); font-family: var(--font-heading); animation: slideDown 0.3s ease, fadeOut 0.3s ease 1.7s forwards; border-left: 4px solid var(--accent); max-width: 90%; text-align: center; }
             @keyframes slideDown { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
             @keyframes fadeOut { to { opacity: 0; transform: translate(-50%, -10px); } }
@@ -792,7 +875,7 @@
                         <div class="theme-label"><i class="fas fa-moon" aria-hidden="true"></i><span>Escuro</span></div>
                     </div>
                     <div class="theme-toggle">
-                        <input type="checkbox" id="theme-switch" aria-label="Alternar tema (Ctrl+D)">
+                        <input type="checkbox" id="theme-switch" class="theme-switch-control" aria-label="Alternar tema (Ctrl+D)">
                         <label class="theme-slider" for="theme-switch"></label>
                     </div>
                 </div>
@@ -4294,8 +4377,58 @@
 
             <div class="mobile-quick-actions">
                 <button class="mobile-quick-btn bookmark-btn" id="quick-bookmark-btn" title="Marcar página" aria-label="Marcar/desmarcar página"><i class="far fa-bookmark"></i></button>
-                <button class="mobile-quick-btn" id="quick-tools-btn" title="Abrir ferramentas" aria-label="Abrir ferramentas" aria-controls="reader-tools" aria-expanded="false"><i class="fas fa-tools"></i></button>
+                <button class="mobile-quick-btn" id="quick-tools-btn" title="Abrir ferramentas" aria-label="Abrir ferramentas" aria-controls="mobile-tools-sheet" aria-expanded="false"><i class="fas fa-tools"></i></button>
             </div>
+
+            <div class="mobile-tools-overlay" id="mobile-tools-overlay" aria-hidden="true"></div>
+            <aside class="mobile-tools-sheet" id="mobile-tools-sheet" aria-label="Ferramentas rápidas" aria-hidden="true">
+                <div class="mobile-tools-handle" aria-hidden="true"></div>
+                <div class="mobile-tools-header">
+                    <div class="mobile-tools-title"><i class="fas fa-sliders"></i><span>Ferramentas</span></div>
+                    <button class="mobile-tools-close" id="mobile-tools-close" aria-label="Fechar ferramentas"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="mobile-tools-content">
+                    <section class="mobile-tools-section" aria-label="Aparência">
+                        <div class="section-title"><i class="fas fa-palette" aria-hidden="true"></i><span>Aparência</span></div>
+                        <div class="font-size-controls" role="group" aria-label="Tamanho da fonte (mobile)">
+                            <button class="font-size-btn small-font" data-size="small" aria-label="Fonte pequena" aria-pressed="false">A</button>
+                            <button class="font-size-btn medium-font" data-size="medium" aria-label="Fonte média" aria-pressed="true">A</button>
+                            <button class="font-size-btn large-font" data-size="large" aria-label="Fonte grande" aria-pressed="false">A</button>
+                            <button class="font-size-btn x-large-font" data-size="x-large" aria-label="Fonte extra grande" aria-pressed="false">A</button>
+                        </div>
+                        <div class="theme-control" style="margin-top: 10px;">
+                            <div class="theme-labels">
+                                <div class="theme-label"><i class="fas fa-sun" aria-hidden="true"></i><span>Claro</span></div>
+                                <div class="theme-label"><i class="fas fa-moon" aria-hidden="true"></i><span>Escuro</span></div>
+                            </div>
+                            <div class="theme-toggle">
+                                <input type="checkbox" id="mobile-theme-switch" class="theme-switch-control" aria-label="Alternar tema no painel móvel">
+                                <label class="theme-slider" for="mobile-theme-switch"></label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="mobile-tools-section" aria-label="Marcadores">
+                        <div class="section-title"><i class="fas fa-bookmark" aria-hidden="true"></i><span>Poesias Marcadas</span><span class="bookmark-count" id="mobile-bookmark-count">(0)</span></div>
+                        <div class="bookmarks-container" id="mobile-bookmarks-container" role="list" aria-label="Lista de marcadores no celular"></div>
+                        <button class="btn btn-small" id="mobile-bookmark-page" style="margin-top: 10px; width: 100%;" title="Marcar/Desmarcar página">
+                            <i class="far fa-bookmark" aria-hidden="true"></i>
+                            <span>Marcar Página Atual</span>
+                        </button>
+                    </section>
+
+                    <section class="mobile-tools-section" aria-label="Progresso">
+                        <div class="section-title"><i class="fas fa-chart-line" aria-hidden="true"></i><span>Progresso</span></div>
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20" aria-label="Progresso de leitura no celular">
+                            <div class="progress" id="mobile-reading-progress" style="width: 20%"></div>
+                        </div>
+                        <div class="progress-stats">
+                            <div class="stat"><div class="stat-value" id="mobile-current-page">1</div><div class="stat-label">Página Atual</div></div>
+                            <div class="stat"><div class="stat-value" id="mobile-progress-percentage">20%</div><div class="stat-label">Completo</div></div>
+                        </div>
+                    </section>
+                </div>
+            </aside>
             
             <footer>
                 <div class="footer-content">
@@ -4340,7 +4473,8 @@
                 totalPagesSpan: document.getElementById('total-pages'),
                 readingProgress: document.getElementById('reading-progress'),
                 progressPercentage: document.getElementById('progress-percentage'),
-                themeSwitch: document.getElementById('theme-switch'),
+                allProgressBars: document.querySelectorAll('.progress-bar'),
+                themeSwitches: document.querySelectorAll('.theme-switch-control'),
                 bookmarkPageBtn: document.getElementById('bookmark-page'),
                 bookmarksContainer: document.getElementById('bookmarks-container'),
                 bookmarkCount: document.getElementById('bookmark-count'),
@@ -4359,7 +4493,16 @@
                 bottomCurrentPage: document.getElementById('bottom-current-page'),
                 bottomTotalPages: document.getElementById('bottom-total-pages'),
                 quickBookmarkBtn: document.getElementById('quick-bookmark-btn'),
-                quickToolsBtn: document.getElementById('quick-tools-btn')
+                quickToolsBtn: document.getElementById('quick-tools-btn'),
+                mobileToolsSheet: document.getElementById('mobile-tools-sheet'),
+                mobileToolsOverlay: document.getElementById('mobile-tools-overlay'),
+                mobileToolsCloseBtn: document.getElementById('mobile-tools-close'),
+                mobileBookmarkPageBtn: document.getElementById('mobile-bookmark-page'),
+                mobileBookmarksContainer: document.getElementById('mobile-bookmarks-container'),
+                mobileBookmarkCount: document.getElementById('mobile-bookmark-count'),
+                mobileReadingProgress: document.getElementById('mobile-reading-progress'),
+                mobileProgressPercentage: document.getElementById('mobile-progress-percentage'),
+                mobileCurrentPageSpan: document.getElementById('mobile-current-page')
             };
 
             let currentNotification = null;
@@ -4435,11 +4578,14 @@
                         dom.pageInput.classList.remove('error-input');
                     }
                     if (dom.currentPageSpan) dom.currentPageSpan.textContent = pageNumber;
+                    if (dom.mobileCurrentPageSpan) dom.mobileCurrentPageSpan.textContent = pageNumber;
                     
                     const progress = (pageNumber / ebookConfig.totalPages) * 100;
                     if (dom.readingProgress) dom.readingProgress.style.width = `${progress}%`;
+                    if (dom.mobileReadingProgress) dom.mobileReadingProgress.style.width = `${progress}%`;
                     if (dom.progressPercentage) dom.progressPercentage.textContent = `${Math.round(progress)}%`;
-                    if (dom.progressBar) dom.progressBar.setAttribute('aria-valuenow', Math.round(progress));
+                    if (dom.mobileProgressPercentage) dom.mobileProgressPercentage.textContent = `${Math.round(progress)}%`;
+                    dom.allProgressBars.forEach((bar) => bar.setAttribute('aria-valuenow', Math.round(progress)));
                     
                     updateBookmarkButton();
                     updateBookmarksDisplay();
@@ -4452,8 +4598,9 @@
                         if (headerToFocus) headerToFocus.focus();
                     }
 
-                    if (ebookConfig.isMobile && dom.readerTools && dom.readerTools.classList.contains('mobile-open')) {
-                        toggleMobileTools();
+                    if (ebookConfig.isMobile) {
+                        if (dom.readerTools && dom.readerTools.classList.contains('mobile-open')) setMobileSidebarState(false);
+                        if (dom.mobileToolsSheet && dom.mobileToolsSheet.classList.contains('active')) setMobileSheetState(false);
                     }
                 }
             };
@@ -4508,11 +4655,10 @@
             function applyTheme(theme) {
                 if (theme === 'dark') {
                     document.body.classList.add('dark-theme');
-                    if (dom.themeSwitch) dom.themeSwitch.checked = true;
                 } else {
                     document.body.classList.remove('dark-theme');
-                    if (dom.themeSwitch) dom.themeSwitch.checked = false;
                 }
+                dom.themeSwitches.forEach(sw => { sw.checked = (theme === 'dark'); });
                 ebookConfig.theme = theme;
                 saveSettings();
             }
@@ -4542,20 +4688,19 @@
                 return `Página ${pageNumber}`;
             }
 
-            function updateBookmarksDisplay() {
-                if (!dom.bookmarksContainer) return;
-                dom.bookmarksContainer.innerHTML = '';
-                if (dom.bookmarkCount) dom.bookmarkCount.textContent = `(${ebookConfig.bookmarks.length})`;
-                
+            function renderBookmarksInContainer(container) {
+                if (!container) return;
+                container.innerHTML = '';
+
                 if (ebookConfig.bookmarks.length === 0) {
                     const empty = document.createElement('div');
                     empty.className = 'bookmark-tag';
                     empty.innerHTML = '<span><i class="far fa-bookmark"></i> Nenhuma página marcada</span>';
                     empty.addEventListener('click', toggleBookmark);
-                    dom.bookmarksContainer.appendChild(empty);
+                    container.appendChild(empty);
                     return;
                 }
-                
+
                 ebookConfig.bookmarks.forEach(page => {
                     const pageTitle = getPageTitle(page);
                     const bookmark = document.createElement('div');
@@ -4568,7 +4713,7 @@
                             <button class="bookmark-action-btn remove-btn" title="Remover marcador" aria-label="Remover ${pageTitle}"><i class="fas fa-times"></i></button>
                         </div>
                     `;
-                    
+
                     bookmark.querySelector('.goto-btn').addEventListener('click', (e) => { e.stopPropagation(); window.goToPage(page); });
                     bookmark.querySelector('.remove-btn').addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -4582,16 +4727,29 @@
                         }
                     });
                     bookmark.addEventListener('click', () => window.goToPage(page));
-                    dom.bookmarksContainer.appendChild(bookmark);
+                    container.appendChild(bookmark);
                 });
             }
 
+            function updateBookmarksDisplay() {
+                if (dom.bookmarkCount) dom.bookmarkCount.textContent = `(${ebookConfig.bookmarks.length})`;
+                if (dom.mobileBookmarkCount) dom.mobileBookmarkCount.textContent = `(${ebookConfig.bookmarks.length})`;
+                renderBookmarksInContainer(dom.bookmarksContainer);
+                renderBookmarksInContainer(dom.mobileBookmarksContainer);
+            }
+
             function updateBookmarkButton() {
-                if (!dom.bookmarkPageBtn) return;
                 const isBookmarked = ebookConfig.bookmarks.includes(ebookConfig.currentPage);
-                dom.bookmarkPageBtn.innerHTML = isBookmarked 
-                    ? '<i class="fas fa-bookmark"></i><span>Página Marcada</span>'
-                    : '<i class="far fa-bookmark"></i><span>Marcar Página Atual</span>';
+
+                const label = isBookmarked ? 'Página Marcada' : 'Marcar Página Atual';
+                const icon = isBookmarked ? 'fas fa-bookmark' : 'far fa-bookmark';
+
+                if (dom.bookmarkPageBtn) {
+                    dom.bookmarkPageBtn.innerHTML = `<i class="${icon}"></i><span>${label}</span>`;
+                }
+                if (dom.mobileBookmarkPageBtn) {
+                    dom.mobileBookmarkPageBtn.innerHTML = `<i class="${icon}"></i><span>${label}</span>`;
+                }
             }
 
             function toggleToolsCollapse() {
@@ -4606,7 +4764,7 @@
                 saveSettings();
             }
 
-            function setMobileToolsState(isOpen) {
+            function setMobileSidebarState(isOpen) {
                 if (!dom.readerTools) return;
 
                 dom.readerTools.classList.toggle('mobile-open', isOpen);
@@ -4619,6 +4777,24 @@
                     dom.mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
                 }
 
+            }
+
+            function toggleMobileSidebar() {
+                if (!dom.readerTools) return;
+                setMobileSidebarState(!dom.readerTools.classList.contains('mobile-open'));
+            }
+
+            function setMobileSheetState(isOpen) {
+                if (!dom.mobileToolsSheet) return;
+
+                dom.mobileToolsSheet.classList.toggle('active', isOpen);
+                dom.mobileToolsSheet.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+
+                if (dom.mobileToolsOverlay) {
+                    dom.mobileToolsOverlay.classList.toggle('active', isOpen);
+                    dom.mobileToolsOverlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+                }
+
                 if (dom.quickToolsBtn) {
                     dom.quickToolsBtn.classList.toggle('active', isOpen);
                     dom.quickToolsBtn.setAttribute('aria-label', isOpen ? 'Fechar ferramentas' : 'Abrir ferramentas');
@@ -4628,14 +4804,16 @@
             }
 
             function toggleMobileTools() {
-                if (!dom.readerTools) return;
-                setMobileToolsState(!dom.readerTools.classList.contains('mobile-open'));
+                if (!dom.mobileToolsSheet) return;
+                setMobileSheetState(!dom.mobileToolsSheet.classList.contains('active'));
             }
 
             function updateMobileUI() {
                 if (!ebookConfig.isMobile) return;
                 if (dom.bottomCurrentPage) dom.bottomCurrentPage.textContent = ebookConfig.currentPage;
                 if (dom.bottomTotalPages) dom.bottomTotalPages.textContent = ebookConfig.totalPages;
+                if (dom.mobileCurrentPageSpan) dom.mobileCurrentPageSpan.textContent = ebookConfig.currentPage;
+                if (dom.mobileProgressPercentage) dom.mobileProgressPercentage.textContent = `${Math.round((ebookConfig.currentPage / ebookConfig.totalPages) * 100)}%`;
                 updateQuickBookmarkButton();
             }
 
@@ -4689,6 +4867,8 @@
                 if (dom.bottomNextBtn) dom.bottomNextBtn.addEventListener('click', () => window.goToPage(ebookConfig.currentPage + 1));
                 if (dom.quickBookmarkBtn) dom.quickBookmarkBtn.addEventListener('click', toggleBookmark);
                 if (dom.quickToolsBtn) dom.quickToolsBtn.addEventListener('click', toggleMobileTools);
+                if (dom.mobileToolsCloseBtn) dom.mobileToolsCloseBtn.addEventListener('click', () => setMobileSheetState(false));
+                if (dom.mobileToolsOverlay) dom.mobileToolsOverlay.addEventListener('click', () => setMobileSheetState(false));
 
                 // Input de Página
                 if (dom.goToPageBtn) {
@@ -4733,7 +4913,7 @@
                         if (titleSpan) {
                             showNotification('Carregando: ' + titleSpan.textContent);
                             if (ebookConfig.isMobile && dom.readerTools.classList.contains('mobile-open')) {
-                                toggleMobileTools();
+                                setMobileSidebarState(false);
                             }
                         }
                     });
@@ -4741,7 +4921,7 @@
 
                 // Tema e Fonte
                 dom.fontSizeBtns.forEach(btn => btn.addEventListener('click', () => applyFontSize(btn.dataset.size)));
-                if (dom.themeSwitch) dom.themeSwitch.addEventListener('change', () => applyTheme(dom.themeSwitch.checked ? 'dark' : 'light'));
+                dom.themeSwitches.forEach(sw => sw.addEventListener('change', () => applyTheme(sw.checked ? 'dark' : 'light')));
                 
                 // Sumário interativo principal (página 2)
                 document.querySelectorAll('.toc-item').forEach(item => {
@@ -4753,8 +4933,9 @@
 
                 // Ferramentas auxiliares
                 if (dom.bookmarkPageBtn) dom.bookmarkPageBtn.addEventListener('click', toggleBookmark);
+                if (dom.mobileBookmarkPageBtn) dom.mobileBookmarkPageBtn.addEventListener('click', toggleBookmark);
                 if (dom.toolsCollapseBtn) dom.toolsCollapseBtn.addEventListener('click', toggleToolsCollapse);
-                if (dom.mobileMenuToggle) dom.mobileMenuToggle.addEventListener('click', toggleMobileTools);
+                if (dom.mobileMenuToggle) dom.mobileMenuToggle.addEventListener('click', toggleMobileSidebar);
                 
                 // Footer & Logo Nav
                 const logoHome = document.getElementById('logo-home');
@@ -4783,7 +4964,13 @@
                 document.addEventListener('click', (e) => {
                     if (!ebookConfig.isMobile || !dom.readerTools || !dom.readerTools.classList.contains('mobile-open')) return;
                     if (dom.readerTools.contains(e.target) || (dom.mobileMenuToggle && dom.mobileMenuToggle.contains(e.target)) || (dom.quickToolsBtn && dom.quickToolsBtn.contains(e.target))) return;
-                    setMobileToolsState(false);
+                    setMobileSidebarState(false);
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!ebookConfig.isMobile || !dom.mobileToolsSheet || !dom.mobileToolsSheet.classList.contains('active')) return;
+                    if (dom.mobileToolsSheet.contains(e.target) || (dom.quickToolsBtn && dom.quickToolsBtn.contains(e.target))) return;
+                    setMobileSheetState(false);
                 });
                 
                 // Teclado
@@ -4813,7 +5000,8 @@
             function init() {
                 if (dom.totalPagesSpan) dom.totalPagesSpan.textContent = ebookConfig.totalPages;
                 if (dom.pageInput) { dom.pageInput.max = ebookConfig.totalPages; dom.pageInput.min = 1; }
-                setMobileToolsState(false);
+                setMobileSidebarState(false);
+                setMobileSheetState(false);
                 
                 if (ebookConfig.isMobile) setupSwipeNavigation();
                 
@@ -4829,10 +5017,12 @@
                         
                         if (ebookConfig.isMobile && !wasMobile) {
                             setupSwipeNavigation();
-                            setMobileToolsState(false);
+                            setMobileSidebarState(false);
+                            setMobileSheetState(false);
                             updateMobileUI();
                         } else if (!ebookConfig.isMobile && wasMobile) {
-                            setMobileToolsState(false);
+                            setMobileSidebarState(false);
+                            setMobileSheetState(false);
                             if (ebookConfig.toolsCollapsed && dom.readerTools) {
                                 dom.readerTools.classList.add('tools-collapsed');
                                 if (dom.toolsCollapseBtn) dom.toolsCollapseBtn.querySelector('i').className = 'fas fa-chevron-right';
