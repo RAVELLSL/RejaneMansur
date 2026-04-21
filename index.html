@@ -256,11 +256,56 @@
         .theme-labels { display: flex; gap: 15px; font-size: 0.9rem; color: var(--text-secondary); }
         .theme-label { display: flex; align-items: center; gap: 5px; }
 
-        .font-size-controls { display: flex; gap: 8px; }
-        .font-size-btn { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; background-color: rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); color: var(--text-secondary); border: 2px solid var(--border); transition: var(--transition); font-family: var(--font-heading); cursor: pointer; flex: 1; }
-        .dark-theme .font-size-btn { background-color: rgba(0, 0, 0, 0.3); color: var(--text-secondary-dark); }
-        .font-size-btn:hover { border-color: var(--primary); color: var(--primary); transform: scale(1.05); }
-        .font-size-btn.active { background-color: var(--primary); color: var(--bg-paper); border-color: var(--primary); }
+        .font-size-controls { display: flex; gap: 8px; align-items: center; }
+        .font-size-current-label {
+            margin-top: 10px;
+            margin-bottom: 8px;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            text-align: center;
+            font-weight: 600;
+        }
+        .font-size-helper {
+            margin-top: 6px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            opacity: 0.9;
+        }
+        .font-size-step-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.25rem;
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+            transition: var(--transition);
+            font-family: var(--font-heading);
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+        .dark-theme .font-size-step-btn { background-color: rgba(0, 0, 0, 0.3); color: var(--text-secondary-dark); }
+        .font-size-step-btn:hover { border-color: var(--primary); color: var(--primary); transform: scale(1.05); }
+        .font-size-step-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+        .font-size-step-value {
+            flex: 1;
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            border: 1px dashed var(--border);
+            border-radius: var(--border-radius-md);
+            padding: 10px 8px;
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .dark-theme .font-size-step-value { background: rgba(0, 0, 0, 0.2); }
 
         .bookmarks-container { display: flex; flex-direction: column; gap: 10px; max-height: 200px; overflow-y: auto; padding-right: 5px; scrollbar-width: thin; scrollbar-color: var(--primary) var(--border); }
         .bookmark-tag { background-color: rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); color: var(--text); padding: 10px 15px; border-radius: var(--border-radius-md); font-size: 0.9rem; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: var(--transition); border: 1px solid var(--border); font-family: var(--font-body); }
@@ -287,6 +332,12 @@
         .book-content-container { position: relative; background-color: var(--bg-paper); backdrop-filter: blur(10px); border-radius: var(--border-radius-lg); box-shadow: var(--shadow-md); overflow: hidden; min-height: 70vh; transition: var(--transition); border: 1px solid var(--border); }
         .book-content-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(to bottom, transparent 95%, rgba(139, 90, 43, 0.05) 100%); pointer-events: none; z-index: var(--z-base); }
         .book-content { padding: 50px 60px; min-height: 70vh; overflow-y: auto; font-family: var(--font-body); position: relative; z-index: 2; scroll-behavior: smooth; }
+
+        @media (max-width: 1100px) {
+            .container { gap: 20px; }
+            .reader-tools { width: 280px; padding: 20px; }
+            .book-content { padding: 40px 35px; }
+        }
 
         .book-page { display: none; opacity: 0; transition: opacity 0.5s ease; max-width: 800px; margin: 0 auto; }
         .book-page.active { display: block; opacity: 1; animation: fadeInPage 0.5s ease; }
@@ -389,16 +440,16 @@
         .book-page h2.section-title-main { color: var(--primary); margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid var(--border); font-family: var(--font-heading); font-weight: 600; font-size: 2rem; position: relative; text-align: center; }
         .book-page h2.section-title-main::after { content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%); width: 100px; height: 1px; background: linear-gradient(90deg, transparent, var(--primary), transparent); }
 
-        .poem-title { font-family: var(--font-heading); font-size: 1.8rem; color: var(--accent); margin: 30px 0 15px; text-align: center; font-weight: 500; position: relative; }
-        .poem-subtitle { font-size: 1.2rem; margin-top: -10px; }
+        .poem-title { font-family: var(--font-heading); font-size: 1.8em; color: var(--accent); margin: 30px 0 15px; text-align: center; font-weight: 500; position: relative; }
+        .poem-subtitle { font-size: 1.2em; margin-top: -10px; }
         .poem-title::before, .poem-title::after { content: '~'; position: absolute; top: 50%; transform: translateY(-50%); color: var(--border); font-size: 1.2rem; }
         .poem-title::before { left: 20%; }
         .poem-title::after { right: 20%; }
 
         .poem { text-align: left; margin: 25px auto 40px; line-height: 1.8; position: relative; max-width: 700px; }
-        .poem p { margin-bottom: 5px; font-size: 1.15rem; text-align: left; line-height: 1.5; }
+        .poem p { margin-bottom: 5px; font-size: 1.15em; text-align: left; line-height: 1.5; }
         .stanza-break { margin: 1em 0; }
-        .poem-author { text-align: right; font-style: italic; color: var(--text-secondary); margin-top: 30px; padding-right: 20px; position: relative; font-size: 1.1rem; }
+        .poem-author { text-align: right; font-style: italic; color: var(--text-secondary); margin-top: 30px; padding-right: 20px; position: relative; font-size: 1.1em; }
         .poem-author::before { content: '—'; margin-right: 5px; }
         .poem-author small { display: block; font-size: 0.9rem; color: var(--accent); margin-top: 5px; }
 
@@ -434,7 +485,8 @@
         .tools-collapsed .accordion-container { display: none; } /* Esconde o acordeão ao colapsar */
         .tools-collapsed .bookmark-tag { justify-content: center; padding: 10px; }
         .tools-collapsed .bookmark-actions { display: none; }
-        .tools-collapsed .font-size-btn { width: 32px; height: 32px; font-size: 0.8rem; }
+        .tools-collapsed .font-size-step-btn, .tools-collapsed .font-size-step-value { display: none; }
+        .tools-collapsed .font-size-current-label, .tools-collapsed .font-size-helper { display: none; }
         .tools-collapsed .theme-control { justify-content: center; padding: 10px; }
         .tools-collapsed .page-input-group { flex-direction: column; padding: 10px; }
         .tools-collapsed .page-input { width: 100%; }
@@ -465,9 +517,9 @@
             .cover-title { font-size: 2.5rem; padding-top: 30px; }
             .cover-subtitle { font-size: 1.2rem; }
             .book-page h2.section-title-main { font-size: 1.7rem; }
-            .poem-title { font-size: 1.5rem; }
+            .poem-title { font-size: 1.5em; }
             .poem-title::before, .poem-title::after { display: none; }
-            .poem p { font-size: 1rem; margin-bottom: 4px; }
+            .poem p { font-size: 1em; margin-bottom: 4px; }
             .bio-author-name { font-size: 1.5rem; flex-direction: column; align-items: flex-start; }
             
             .mobile-bottom-nav { display: flex; position: fixed; bottom: 0; left: 0; width: 100%; background-color: var(--bg-paper); backdrop-filter: blur(15px); border-top: 1px solid var(--border); padding: 12px 15px; z-index: var(--z-mobile-nav); box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.1); justify-content: space-between; align-items: center; gap: 10px; }
@@ -848,7 +900,7 @@
                     <div class="page-input-group">
                         <label for="page-input" class="visually-hidden">Ir para página</label>
                         <span>Página</span>
-                        <input type="number" id="page-input" min="1" max="20" value="1" class="page-input" aria-label="Número da página">
+                        <input type="number" id="page-input" min="1" max="79" value="1" class="page-input" aria-label="Número da página">
                         <span>de <span id="total-pages">79</span></span>
                     </div>
                     <button class="btn" id="go-to-page" title="Ir para página (Enter)">
@@ -863,12 +915,13 @@
                     <i class="fas fa-palette" aria-hidden="true"></i>
                     <span>Aparência</span>
                 </div>
+                <div class="font-size-current-label">Tamanho atual: <strong class="font-size-label-value">Médio</strong></div>
                 <div class="font-size-controls" role="group" aria-label="Tamanho da fonte">
-                    <button class="font-size-btn small-font" data-size="small" title="Pequeno (Ctrl -)" aria-label="Fonte pequena" aria-pressed="false">A</button>
-                    <button class="font-size-btn medium-font active" data-size="medium" title="Médio" aria-label="Fonte média" aria-pressed="true">A</button>
-                    <button class="font-size-btn large-font" data-size="large" title="Grande (Ctrl +)" aria-label="Fonte grande" aria-pressed="false">A</button>
-                    <button class="font-size-btn x-large-font" data-size="x-large" title="Extra Grande" aria-label="Fonte extra grande" aria-pressed="false">A</button>
+                    <button class="font-size-step-btn" data-action="decrease" title="Diminuir fonte (Ctrl -)" aria-label="Diminuir fonte">−</button>
+                    <div class="font-size-step-value" aria-hidden="true">Ajuste</div>
+                    <button class="font-size-step-btn" data-action="increase" title="Aumentar fonte (Ctrl +)" aria-label="Aumentar fonte">+</button>
                 </div>
+                <div class="font-size-helper">Use os botões − e + para ajustar a leitura</div>
                 <div class="theme-control">
                     <div class="theme-labels">
                         <div class="theme-label"><i class="fas fa-sun" aria-hidden="true"></i><span>Claro</span></div>
@@ -4390,12 +4443,13 @@
                 <div class="mobile-tools-content">
                     <section class="mobile-tools-section" aria-label="Aparência">
                         <div class="section-title"><i class="fas fa-palette" aria-hidden="true"></i><span>Aparência</span></div>
+                        <div class="font-size-current-label">Tamanho atual: <strong class="font-size-label-value">Médio</strong></div>
                         <div class="font-size-controls" role="group" aria-label="Tamanho da fonte (mobile)">
-                            <button class="font-size-btn small-font" data-size="small" aria-label="Fonte pequena" aria-pressed="false">A</button>
-                            <button class="font-size-btn medium-font" data-size="medium" aria-label="Fonte média" aria-pressed="true">A</button>
-                            <button class="font-size-btn large-font" data-size="large" aria-label="Fonte grande" aria-pressed="false">A</button>
-                            <button class="font-size-btn x-large-font" data-size="x-large" aria-label="Fonte extra grande" aria-pressed="false">A</button>
+                            <button class="font-size-step-btn" data-action="decrease" aria-label="Diminuir fonte">−</button>
+                            <div class="font-size-step-value" aria-hidden="true">Ajuste</div>
+                            <button class="font-size-step-btn" data-action="increase" aria-label="Aumentar fonte">+</button>
                         </div>
+                        <div class="font-size-helper">Use os botões − e + para ajustar a leitura</div>
                         <div class="theme-control" style="margin-top: 10px;">
                             <div class="theme-labels">
                                 <div class="theme-label"><i class="fas fa-sun" aria-hidden="true"></i><span>Claro</span></div>
@@ -4478,7 +4532,8 @@
                 bookmarkPageBtn: document.getElementById('bookmark-page'),
                 bookmarksContainer: document.getElementById('bookmarks-container'),
                 bookmarkCount: document.getElementById('bookmark-count'),
-                fontSizeBtns: document.querySelectorAll('.font-size-btn'),
+                fontSizeStepBtns: document.querySelectorAll('.font-size-step-btn'),
+                fontSizeLabelValues: document.querySelectorAll('.font-size-label-value'),
                 mobileMenuToggle: document.getElementById('mobile-menu-toggle'),
                 readerTools: document.getElementById('reader-tools'),
                 toolsCollapseBtn: document.getElementById('tools-collapse-btn'),
@@ -4507,6 +4562,7 @@
 
             let currentNotification = null;
             let swipeListenerAttached = false; 
+            const FONT_SIZES = ['small', 'medium', 'large', 'x-large'];
 
             // ===========================================
             // FUNÇÕES AUXILIARES
@@ -4638,17 +4694,42 @@
             // ===========================================
             // FUNÇÕES PRINCIPAIS
             // ===========================================
+            function getFontSizeLabel(size) {
+                const labels = {
+                    'small': 'Pequeno',
+                    'medium': 'Médio',
+                    'large': 'Grande',
+                    'x-large': 'Extra Grande'
+                };
+                return labels[size] || 'Médio';
+            }
+
+            function updateFontSizeControls() {
+                const currentIndex = FONT_SIZES.indexOf(ebookConfig.fontSize);
+                dom.fontSizeStepBtns.forEach((btn) => {
+                    const isIncrease = btn.dataset.action === 'increase';
+                    const disable = isIncrease ? currentIndex >= FONT_SIZES.length - 1 : currentIndex <= 0;
+                    btn.disabled = disable;
+                    btn.setAttribute('aria-disabled', disable ? 'true' : 'false');
+                });
+            }
+
+            function adjustFontSize(direction) {
+                const currentIndex = FONT_SIZES.indexOf(ebookConfig.fontSize);
+                const nextIndex = Math.max(0, Math.min(FONT_SIZES.length - 1, currentIndex + direction));
+                applyFontSize(FONT_SIZES[nextIndex]);
+            }
+
             function applyFontSize(size) {
                 if (!dom.bookContent) return;
                 dom.bookContent.classList.remove('small-font', 'medium-font', 'large-font', 'x-large-font');
                 dom.bookContent.classList.add(`${size}-font`);
                 ebookConfig.fontSize = size;
-                
-                dom.fontSizeBtns.forEach(btn => {
-                    const isActive = btn.dataset.size === size;
-                    btn.classList.toggle('active', isActive);
-                    btn.setAttribute('aria-pressed', isActive);
+
+                dom.fontSizeLabelValues.forEach(label => {
+                    label.textContent = getFontSizeLabel(size);
                 });
+                updateFontSizeControls();
                 saveSettings();
             }
 
@@ -4920,7 +5001,11 @@
                 });
 
                 // Tema e Fonte
-                dom.fontSizeBtns.forEach(btn => btn.addEventListener('click', () => applyFontSize(btn.dataset.size)));
+                dom.fontSizeStepBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        adjustFontSize(btn.dataset.action === 'increase' ? 1 : -1);
+                    });
+                });
                 dom.themeSwitches.forEach(sw => sw.addEventListener('change', () => applyTheme(sw.checked ? 'dark' : 'light')));
                 
                 // Sumário interativo principal (página 2)
@@ -4980,14 +5065,12 @@
                     if (e.key === 'ArrowLeft') { e.preventDefault(); window.goToPage(ebookConfig.currentPage - 1); }
                     else if (e.key === 'ArrowRight') { e.preventDefault(); window.goToPage(ebookConfig.currentPage + 1); }
                     else if (e.ctrlKey && (e.key === '+' || e.key === '=' || e.key === 'Add')) {
-                        e.preventDefault(); const sizes = ['small', 'medium', 'large', 'x-large'];
-                        const idx = sizes.indexOf(ebookConfig.fontSize);
-                        if (idx < sizes.length - 1) applyFontSize(sizes[idx + 1]);
+                        e.preventDefault();
+                        adjustFontSize(1);
                     } 
                     else if (e.ctrlKey && (e.key === '-' || e.key === 'Subtract')) {
-                        e.preventDefault(); const sizes = ['small', 'medium', 'large', 'x-large'];
-                        const idx = sizes.indexOf(ebookConfig.fontSize);
-                        if (idx > 0) applyFontSize(sizes[idx - 1]);
+                        e.preventDefault();
+                        adjustFontSize(-1);
                     } 
                     else if (e.ctrlKey && e.key === 'b') { e.preventDefault(); toggleBookmark(); }
                     else if (e.ctrlKey && e.key === 'd') { e.preventDefault(); applyTheme(ebookConfig.theme === 'light' ? 'dark' : 'light'); }
